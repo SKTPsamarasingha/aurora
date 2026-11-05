@@ -1,0 +1,72 @@
+@import "tailwindcss";
+
+:root {
+    color-scheme: light;
+
+    --background: #5C564D; /* Exact warm cream/ivory canvas background */
+    --foreground: #B9AEA4; /*  Elegant deep taupe/charcoal-brown for all luxury text */
+    --text: #FFFF;
+
+    --surface: #FDFDFD; /* Ultra-clean white used selectively for product showcases */
+    --accent: #E8E2D7; /* A slightly darker warm beige for hover states and button fills */
+    --gold: #C5A880; /* Muted champagne gold tone matching the jewelry highlights */
+    --muted: #9E978E; /* Muted earth gray for secondary details and footer notes */
+    --border: rgba(92, 86, 77, 0.15); /* Subtle clean border using a percentage of the text color */
+}
+
+@theme inline {
+    --color-background: var(--background);
+    --color-foreground: var(--foreground);
+    --color-surface: var(--surface);
+    --color-accent: var(--accent);
+    --color-gold: var(--gold);
+    --color-muted: var(--muted);
+    --color-border: var(--border);
+
+    --color-text: var(--text);
+
+    --font-sans: var(--font-body);
+    --font-heading: var(--font-heading);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100%;
+    background: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-body), sans-serif;
+}
+
+h1,
+h2,
+h3,
+.font-heading {
+    /*font-family: var(--font-heading), serif;*/
+    /*font-weight: 500;*/
+}
+
+a,
+button {
+    -webkit-tap-highlight-color: transparent;
+}
+
+button {
+    cursor: pointer;
+}
+
+
+/* Hide scrollbar globally for WebKit browsers (Chrome, Safari, Opera, Edge) */
+::-webkit-scrollbar {
+    display: none;
+    width: 0px;
+    height: 0px;
+}
+
+/* Hide scrollbar globally for Firefox and IE/Edge */
+* {
+    -ms-overflow-style: none; /* Internet Explorer & Legacy Edge */
+    scrollbar-width: none; /* Firefox */
+}
