@@ -1,7 +1,6 @@
 import {beforeEach, describe, expect, it, vi, beforeAll, afterAll} from 'vitest';
 import {app, auth, db, googleProvider} from "@/src/libs/firebase"
 import {adminDb} from "@/src/libs/firebaseAdmin";
-import {deleteDoc} from "firebase/firestore"; // Adjust path to your actual config file
 
 
 // 1. Mock the entire Firebase SDK before importing your config
@@ -60,7 +59,7 @@ describe("Firebase Admin Connection Integration Test", () => {
 
     // Clean up after test runs to leave the database clean
     afterAll(async () => {
-        await deleteDoc(testDocRef);
+        await testDocRef.delete();
     });
 
     it("should successfully connect, write, and read from Firestore", async () => {

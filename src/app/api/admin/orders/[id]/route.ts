@@ -5,15 +5,16 @@ import { doc, getDoc, updateDoc, deleteDoc } from "firebase/firestore";
 // GET single order details
 export async function GET(
     request: NextRequest,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
     try {
+        const { id } = await params;
         const userId = request.headers.get("x-user-id");
         if (!userId) {
             return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
         }
 
-        const docRef = doc(db, "orders", params.id);
+        const docRef = doc(db, "orders", id);
         const docSnap = await getDoc(docRef);
 
         if (!docSnap.exists()) {
@@ -32,9 +33,10 @@ export async function GET(
 // PUT / UPDATE order status
 export async function PUT(
     request: NextRequest,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
     try {
+        const { id } = await params;
         const userId = request.headers.get("x-user-id");
         if (!userId) {
             return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
@@ -43,7 +45,7 @@ export async function PUT(
         const body = await request.json();
         const { status } = body;
 
-        const docRef = doc(db, "orders", params.id);
+        const docRef = doc(db, "orders", id);
         await updateDoc(docRef, {
             status,
             updatedAt: new Date().toISOString(),
@@ -61,15 +63,16 @@ export async function PUT(
 // DELETE order record
 export async function DELETE(
     request: NextRequest,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
     try {
+        const { id } = await params;
         const userId = request.headers.get("x-user-id");
         if (!userId) {
             return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
         }
 
-        const docRef = doc(db, "orders", params.id);
+        const docRef = doc(db, "orders", id);
         await deleteDoc(docRef);
 
         return NextResponse.json(

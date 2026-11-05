@@ -124,7 +124,7 @@ export async function PUT(
 // DELETE /api/orders/[id] - Remove an order document
 export async function DELETE(
     request: Request,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
     try {
         const decodedToken = await parseJwtPayload(request);
@@ -136,13 +136,13 @@ export async function DELETE(
         }
 
         const userId = decodedToken.user_id;
-        const orderId = params.id;
+        const { id: orderId } = await params;
 
         // const docRef = db.collection("orders").doc(orderId);
         const orderRef = await doc(db, "orders",orderId);
         const orderSnap = await getDoc(orderRef);
 
-        if (!orderSnap.exists) {
+        if (!orderSnap.exists()) {
             return NextResponse.json(
                 { success: false, error: "Order not found" },
                 { status: 404 }

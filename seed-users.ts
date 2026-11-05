@@ -5,7 +5,14 @@ import { adminApp, adminDb } from "@/src/libs/firebaseAdmin";
 
 const auth = getAuth(adminApp);
 
-const accounts = [
+type SeedAccount = {
+    role: "superadmin" | "admin" | "customer";
+    email?: string;
+    password?: string;
+    displayName: string;
+};
+
+const accounts: SeedAccount[] = [
     {
         role: "superadmin",
         email: process.env.FIREBASE_SUPERADMIN_EMAIL,
@@ -26,7 +33,7 @@ const accounts = [
     },
 ];
 
-async function getOrCreateUser(account) {
+async function getOrCreateUser(account: SeedAccount) {
     if (!account.email || !account.password) {
         throw new Error(`Missing email or password for role: ${account.role}`);
     }
@@ -36,8 +43,13 @@ async function getOrCreateUser(account) {
     try {
         user = await auth.getUserByEmail(account.email);
         console.log(`Auth user already exists: ${account.email}`);
-    } catch (error) {
-        if (error.code !== "auth/user-not-found") {
+    } catch (error: unknown) {
+        if (
+            typeof error !== "object" ||
+            error === null ||
+            !("code" in error) ||
+            error.code !== "auth/user-not-found"
+        ) {
             throw error;
         }
 
@@ -55,7 +67,7 @@ async function getOrCreateUser(account) {
     return user;
 }
 
-async function seedUser(account) {
+async function seedUser(account: SeedAccount) {
     const user = await getOrCreateUser(account);
 
     // Preserve existing custom claims while assigning the role.
@@ -77,11 +89,10 @@ async function seedUser(account) {
             (provider) => provider.providerId
         ),
         updatedAt: FieldValue.serverTimestamp(),
+        ...(!existingDoc.exists
+            ? { createdAt: FieldValue.serverTimestamp() }
+            : {}),
     };
-
-    if (!existingDoc.exists) {
-        profile.createdAt = FieldValue.serverTimestamp();
-    }
 
     await userRef.set(profile, { merge: true });
 

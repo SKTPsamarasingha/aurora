@@ -1,5 +1,5 @@
 'use client';
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {usePathname} from "next/navigation";
 
 interface FooterProps {
@@ -9,7 +9,12 @@ interface FooterProps {
 export default function Footer({companyName = "AURORA"}: FooterProps) {
     const [email, setEmail] = useState("");
     const [subscribed, setSubscribed] = useState(false);
+    const [currentYear, setCurrentYear] = useState<number | null>(null);
     const pathname = usePathname();
+
+    useEffect(() => {
+        setCurrentYear(new Date().getFullYear());
+    }, []);
 
     const categoryLinks = [
         {name: "Rings", href: "#rings"},
@@ -187,7 +192,7 @@ export default function Footer({companyName = "AURORA"}: FooterProps) {
                 <div
                     className="pt-8 border-t border-[#2C2825]/15 flex flex-col sm:flex-row items-center justify-between gap-4 text-[10px] sm:text-xs font-mono text-[#2C2825]/70">
                     <p className="uppercase tracking-widest font-light">
-                        &copy; {new Date().getFullYear()} {companyName} MAISON & JEWELRY ATELIER. ALL RIGHTS RESERVED.
+                        &copy; {currentYear ?? ""} {companyName} MAISON & JEWELRY ATELIER. ALL RIGHTS RESERVED.
                     </p>
 
                     <div className="flex items-center gap-6">

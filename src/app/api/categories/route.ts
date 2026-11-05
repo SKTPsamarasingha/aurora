@@ -31,7 +31,7 @@ export async function POST(request: NextRequest) {
         const rawData = {
             name: formData.get("name"),
             slug: formData.get("slug"),
-            description: formData.get("description"),
+            description: formData.get("description") ?? undefined,
             isActive: formData.get("isActive"),
             sortOrder: formData.get("sortOrder"),
         };

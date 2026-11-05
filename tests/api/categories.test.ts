@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { NextRequest } from "next/server";
-import { GET as getCategories, POST as createCategory } from "@/src/api/categories/route";
-import { GET as getCategoryById, DELETE as deleteCategory } from "@/src/api/categories/[id]/route";
+import { GET as getCategories, POST as createCategory } from "@/src/app/api/categories/route";
+import { GET as getCategoryById, DELETE as deleteCategory } from "@/src/app/api/categories/[id]/route";
 
 vi.mock("@/src/libs/firebase", () => ({
     auth: {},
